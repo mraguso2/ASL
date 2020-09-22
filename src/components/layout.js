@@ -1,52 +1,54 @@
 import React from "react"
-import { Link } from "gatsby"
+import { Link, useStaticQuery, graphql } from "gatsby"
+import Footer from './footer'
+import './layout.css';
+import aSL from '../../content/assets/ASL-Title.svg';
+import styled from 'styled-components';
 
 import { rhythm, scale } from "../utils/typography"
 
-const Layout = ({ location, title, children }) => {
-  const rootPath = `${__PATH_PREFIX__}/`
-  let header
+const PieImage = styled.img`
+  width: 10rem;
+  margin-bottom: 0;
+`;
 
-  if (location.pathname === rootPath) {
-    header = (
-      <h1
+
+const Layout = ({ location, title, children }) => {
+
+  const data = useStaticQuery(graphql`
+    query SiteTitleQuery {
+      site {
+        siteMetadata {
+          title
+        }
+      }
+    }
+  `);
+
+  let header = (
+    <h3
+      style={{
+        fontFamily: `Montserrat, sans-serif`,
+        marginTop: 0,
+      }}
+    >
+      <Link
         style={{
-          ...scale(1.5),
-          marginBottom: rhythm(1.5),
-          marginTop: 0,
+          boxShadow: `none`,
+          color: `inherit`,
+          display: `flex`,
+          alignItems: `center`
         }}
+        to={`/`}
       >
-        <Link
-          style={{
-            boxShadow: `none`,
-            color: `inherit`,
-          }}
-          to={`/`}
-        >
-          {title}
-        </Link>
-      </h1>
-    )
-  } else {
-    header = (
-      <h3
-        style={{
-          fontFamily: `Montserrat, sans-serif`,
-          marginTop: 0,
-        }}
-      >
-        <Link
-          style={{
-            boxShadow: `none`,
-            color: `inherit`,
-          }}
-          to={`/`}
-        >
-          {title}
-        </Link>
-      </h3>
-    )
-  }
+        {/* {title} */}
+        <PieImage src={aSL} alt="ASL" />
+        {"  "}
+        <h1>Translator</h1>
+      </Link>
+    </h3>
+  )
+
   return (
     <div
       style={{
@@ -54,15 +56,15 @@ const Layout = ({ location, title, children }) => {
         marginRight: `auto`,
         maxWidth: rhythm(24),
         padding: `${rhythm(1.5)} ${rhythm(3 / 4)}`,
+        minHeight: `100vh`,
+        display: `flex`,
+        flexDirection: `column`,
+        justifyContent: `space-between`
       }}
     >
       <header>{header}</header>
       <main>{children}</main>
-      <footer>
-        © {new Date().getFullYear()}, Built with
-        {` `}
-        <a href="https://www.gatsbyjs.com">Gatsby</a>
-      </footer>
+      <Footer />
     </div>
   )
 }
